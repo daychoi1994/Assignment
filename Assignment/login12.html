@@ -1,0 +1,100 @@
+<html>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#submit").click(function(){
+                
+                var username = $('#username').val();
+                var password = $('#password').val();
+                var repassword = $('#repassword').val();
+                console.log(username);
+                console.log(password);
+                console.log(repassword);
+        
+                if(password == ""){
+                    alert('Please input password');
+                    return;
+                } else if(repassword == ""){
+                    alert('Please input password matching');
+                    return;
+                } else if(password == repassword){
+                    // alert("match");
+                    localStorage.setItem("Username",username);
+        //             $.ajax({
+        //     type: 'GET',
+        //     dataType:"json",
+        //     url: 'https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=fnd&lang=tc ',
+        //     success: function(data,status,xhr){
+        //         console.log('data: ',data);
+        //         alert(data);
+        
+        //         var returnedData=JSON.stringify(data);
+        //         alert(data.weatherForecast[0]['week']);
+        //         $('#showme').html(data.weatherForecast[0]['forecastDate']);
+        //     }
+        // });
+        $.ajax({
+            type: 'GET',
+            dataType:"json",
+            url: 'https://dog.ceo/api/breeds/image/random',
+            success: function(data,status,xhr){
+                console.log('data: ',data);
+                // alert(data);
+        
+                var returnedData=JSON.stringify(data);
+                // alert(data.message);
+                $('#showme').html('<img src='+data.message+'>');
+            }
+        });
+                }else if(password != repassword){
+                    $('#showme').html("Please try again").css("background-color","white").css("margin-top","10px").animate({height: "50px"});
+                    localStorage.removeItem("Username",username);
+                    return;
+                }
+                var mydata = "apple="+username+"&ornage="+password;
+        alert(mydata);
+        $.ajax({
+
+            type: 'POST',
+            url : 'http://127.0.0.1:8080/login',
+            dataType:"text",
+            data:mydata,
+            success:function(r){
+                alert(r);
+                if(r=="success"){
+                    alert("login ok");
+                }else{
+                    alert("login fail");
+                    return;
+                }
+            },error:function(xhr,status,error){
+                console.log(error.message);
+            }
+        });
+            });
+            
+        
+        });
+
+        
+        
+        
+        </script>
+    <head>
+        <body>
+            <a href="/logout">Logout</a></br>
+            <input type="text" id="username" class="fadeIn second" 
+            name="login" value="vtc">
+            <input type="password" id="password" class="fadeIn third"
+            name="login" placeholder="password">
+            <input type="password" id="repassword" class="fadeIn third"
+            name="login" placeholder="password"><br>
+
+            <input type="submit" value="login"
+            id="submit" class="fadeIn fourth">
+
+            <div id="showme"></div>
+            <div id="showme2"></div>
+        </body>
+    </head>
+</html>
